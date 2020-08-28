@@ -1,3 +1,10 @@
-﻿  LoadFemFile.cpp
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  ExampleRigidBodies.cpp
+  ExplosionForce.cpp
+  FemResource.cpp
+  LoadFemFile.cpp
+  LoadNodeEleMesh.cpp
+  PartitionFemMesh.cpp
+  RenderTetAssignment.cpp
+  TestScenes.cpp
+  FEMFXViewer.cpp
   FEMFXViewer_vs2019.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Debug\FEMFXViewer_d.exe

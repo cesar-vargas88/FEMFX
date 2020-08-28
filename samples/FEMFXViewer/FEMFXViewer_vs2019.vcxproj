@@ -59,7 +59,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>WIN32;NOMINMAX;_DEBUG;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\amd_femfx\inc;..\..\amd_femfx\src\Common;..\..\amd_femfx\src\Bvh;..\..\amd_femfx\src\PrimitiveCollision;..\..\amd_femfx\src\FindContacts;..\..\amd_femfx\src\Scene;..\..\amd_femfx\src\SparseSolvers;..\..\amd_femfx\src\ConstraintSolver;..\..\amd_femfx\src\Simulation;..\..\amd_femfx\src\Threading;..\..\amd_femfx\inc\Vectormath;..\..\external\trace;..\ExampleRigidBodies;..\sample_task_system;..\..\external\json-develop\include;..\..\external\glfw\include;.;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\amd_femfx\inc;..\..\amd_femfx\src\Common;..\..\amd_femfx\src\Bvh;..\..\amd_femfx\src\PrimitiveCollision;..\..\amd_femfx\src\FindContacts;..\..\amd_femfx\src\Scene;..\..\amd_femfx\src\SparseSolvers;..\..\amd_femfx\src\ConstraintSolver;..\..\amd_femfx\src\Simulation;..\..\amd_femfx\src\Threading;..\..\amd_femfx\inc\Vectormath;..\..\external\trace;..\ExampleRigidBodies;..\sample_task_system;..\..\external\json\include;..\..\external\glfw\include;.;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -82,7 +82,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>WIN32;NOMINMAX;NDEBUG;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\amd_femfx\inc;..\..\amd_femfx\src\Common;..\..\amd_femfx\src\Bvh;..\..\amd_femfx\src\PrimitiveCollision;..\..\amd_femfx\src\FindContacts;..\..\amd_femfx\src\Scene;..\..\amd_femfx\src\SparseSolvers;..\..\amd_femfx\src\ConstraintSolver;..\..\amd_femfx\src\Simulation;..\..\amd_femfx\src\Threading;..\..\amd_femfx\inc\Vectormath;..\..\external\trace;..\ExampleRigidBodies;..\sample_task_system;..\..\external\json-develop\include;..\..\external\glfw\include;.;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\amd_femfx\inc;..\..\amd_femfx\src\Common;..\..\amd_femfx\src\Bvh;..\..\amd_femfx\src\PrimitiveCollision;..\..\amd_femfx\src\FindContacts;..\..\amd_femfx\src\Scene;..\..\amd_femfx\src\SparseSolvers;..\..\amd_femfx\src\ConstraintSolver;..\..\amd_femfx\src\Simulation;..\..\amd_femfx\src\Threading;..\..\amd_femfx\inc\Vectormath;..\..\external\trace;..\ExampleRigidBodies;..\sample_task_system;..\..\external\json\include;..\..\external\glfw\include;.;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
