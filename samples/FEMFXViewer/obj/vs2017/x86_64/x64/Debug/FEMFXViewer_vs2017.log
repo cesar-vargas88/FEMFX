@@ -7,5 +7,8 @@
   RenderTetAssignment.cpp
   TestScenes.cpp
   FEMFXViewer.cpp
-LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
-  FEMFXViewer_vs2017.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2017\x86_64\Debug\FEMFXViewer_d.exe
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+sample_task_system_d.lib(SampleTaskSystem.obj) : warning LNK4099: PDB 'sample_task_system.pdb' was not found with 'sample_task_system_d.lib(SampleTaskSystem.obj)' or at 'C:\Users\cesar.vargas\source\repos\FEMFX\samples\FEMFXViewer\build\vs2017\x86_64\Debug\sample_task_system.pdb'; linking object as if no debug info
+sample_task_system_d.lib(TLGetProcessorInfo.obj) : warning LNK4099: PDB 'sample_task_system.pdb' was not found with 'sample_task_system_d.lib(TLGetProcessorInfo.obj)' or at 'C:\Users\cesar.vargas\source\repos\FEMFX\samples\FEMFXViewer\build\vs2017\x86_64\Debug\sample_task_system.pdb'; linking object as if no debug info
+sample_task_system_d.lib(TLTaskSystem.obj) : warning LNK4099: PDB 'sample_task_system.pdb' was not found with 'sample_task_system_d.lib(TLTaskSystem.obj)' or at 'C:\Users\cesar.vargas\source\repos\FEMFX\samples\FEMFXViewer\build\vs2017\x86_64\Debug\sample_task_system.pdb'; linking object as if no debug info
+  FEMFXViewer_vs2017.vcxproj -> C:\Users\cesar.vargas\source\repos\FEMFX\samples\FEMFXViewer\build\vs2017\x86_64\Debug\FEMFXViewer_d.exe
