@@ -40,6 +40,12 @@ downloaded separately:
 * JSON for Modern C++: https://github.com/nlohmann/json
 * GLFW: https://www.glfw.org/download.html
 
+Clone instructions
+
+submodule@example:~$ git clone https://github.com/cesar-vargas88/FEMFX.git
+submodule@example:~$ git submodule init
+submodule@example:~$ git submodule update
+
 System requirements
 * AMD Ryzen™ 7 2700X Processor or equivalent
 * Windows® 10
@@ -79,4 +85,3 @@ Files:
    * amd_femfx\src\Common\FEMFXSvd3x3.* : 3x3 SVD
    * amd_femfx\src\Threading\ : Async parallel-for and task graph support
    * samples\sample_task_system\TL* : Async task system implementation
-
