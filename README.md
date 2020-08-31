@@ -40,9 +40,8 @@ downloaded separately:
 * JSON for Modern C++: https://github.com/nlohmann/json
 * GLFW: https://www.glfw.org/download.html
 
-Clone instructions
+Update submodules
 
-submodule@example:~$ git clone https://github.com/cesar-vargas88/FEMFX.git
 submodule@example:~$ git submodule init
 submodule@example:~$ git submodule update
 
