@@ -43,6 +43,7 @@ downloaded separately:
 Update submodules
 
 submodule@example:~$ git submodule init
+
 submodule@example:~$ git submodule update
 
 System requirements
