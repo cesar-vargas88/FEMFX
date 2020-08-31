@@ -38,4 +38,4 @@
   FEMFXMpcgSolver.cpp
   FEMFXMpcgSolverSetup.cpp
   FEMFXParallelFor.cpp
-  AMD_FEMFX_vs2017.vcxproj -> C:\Users\cesar.vargas\source\repos\FEMFX\amd_femfx\lib\AMD_FEMFX_d.lib
+  AMD_FEMFX_vs2017.vcxproj -> C:\Users\varga\source\repos\FEMFX\amd_femfx\lib\AMD_FEMFX_d.lib
