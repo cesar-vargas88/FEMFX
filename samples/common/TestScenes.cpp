@@ -1337,8 +1337,8 @@ struct WoodPanelSimObjectTemplate
     float widthX;
     float widthY;
     float widthZ;
-};
 
+};
 struct WoodPanelSimObject
 {
     FmTetMeshBuffer* tetMeshBuffer;
@@ -1566,7 +1566,118 @@ const uint gNumTractorTiresPerInstance = NUM_TRACTOR_TIRES;
 const uint gNumTractorTires = gNumTractorTiresPerInstance*gNumInstances;
 TractorTireSimObject gTractorTires[gNumTractorTires];
 TractorTireSimObjectTemplate gTractorTireTemplate;
+
 #endif
+
+
+
+// Piper 
+
+struct PiperSimObjectTemplate
+{
+    TetMeshBufferTemplate tetMeshBufferTemplates[CarSimObject::numTetMeshBuffers];
+    FmRigidBodySetupParams rigidBodySetupParams[CarSimObject::numRigidBodies];
+
+    FmVector3 wheelMinPositions[4];
+    FmVector3 wheelMaxPositions[4];
+    FmVector3 wheelCenterPositions[4];
+    FmVector3 wheelAnchorPositions[4];
+    FmVector3 wheelAxelBodyPositions[4];
+    FmVector3 wheelAxelBodyHalfDims;
+    
+    TetMeshBufferTemplate bufferTemplate;
+};
+
+struct PiperSimObject
+{
+    FmTetMeshBuffer* tetMeshBuffer;
+};
+
+void InitPiperObjectTemplate(PiperSimObjectTemplate* PiperTemplate, const char* modelsPath)
+{
+    FmVector3 position = FmInitVector3(0.0f);
+    FmVector3 velocity = FmInitVector3(0.0f);
+    FmMatrix3 rotation = FmMatrix3::identity();
+
+    FmTetMaterialParams materialParams;
+    // Hueso sano
+    materialParams.restDensity = 1000.0f;
+    materialParams.youngsModulus = 2.5e7f;
+    materialParams.poissonsRatio = 0.495f;
+
+    // Hueso malo
+    //materialParams.restDensity = 1400.0f;                   // Density at rest
+    //materialParams.youngsModulus = 7.5e7f;                  // Greater values will increase stiffness of material
+    //materialParams.poissonsRatio = 0.495f;                  // Value must be < 0.5.  Defines how much material bulges when compressed, with 0 causing none.  Values closer to 0.5 worsen conditioning and require more iterations.
+    //materialParams.plasticYieldThreshold = 0.0f;            // Threshold for stress magnitude where plastic deformation starts.
+    //materialParams.plasticCreep = 0.0f;                     // Value >= 0 and <=1.  Portion of elastic deformation converted to plastic is creep * (stress_mag - yield)/stress_mag
+    //materialParams.plasticMin = 0.0f;                       // Value > 0 and <= 1.  Minimum scale of compression from plastic deformation.  Smaller values allow greater plastic deformation but may worsen conditioning.
+    //materialParams.plasticMax = 0.0f;                       // Value >= 1.  Maximum scale of stretch from plastic deformation.   Larger values allow greater plastic deformation but may worsen conditioning.
+    //materialParams.fractureStressThreshold = 0.0f;          // Threshold for stress max eigenvalue where fracture occurs
+    //materialParams.maxUnconstrainedSolveIterations = 0.0f;// Maximum number of CG iterations to use with this material
+    //materialParams.lowerDeformationLimit = 0.0f;            // Value > 0 and <= 1, or unlimited if = 0.  Constrains minimum scale of deformation.
+    //materialParams.upperDeformationLimit = 0.0f;            // Value >= 1, or unlimited if = 0.  Constrains maximum scale of deformation.
+
+    // Soft tissue
+    //materialParams.restDensity = 1000.0f;
+    //materialParams.youngsModulus = 5.0e6f;
+    //materialParams.poissonsRatio = 0.495f;
+
+    uint collisionGroup = 0;
+    InitTetMeshBufferTemplate(&PiperTemplate->bufferTemplate, materialParams, collisionGroup, modelsPath, "piper2/C7.1", false, false, false);
+}
+
+void CreatePiperSimObject(PiperSimObject* piper, const PiperSimObjectTemplate& piperTemplate, const FmVector3& position, const FmMatrix3& rotation, const FmVector3& velocity)
+{
+    // Set up a single memory buffer to hold all tet mesh data
+
+    FmTetMesh* tetMeshPtr = NULL;
+    piper->tetMeshBuffer = FmCreateTetMeshBuffer(piperTemplate.bufferTemplate.setupParams, piperTemplate.bufferTemplate.fractureGroupCounts, piperTemplate.bufferTemplate.tetFractureGroupIds, &tetMeshPtr);
+    FmTetMesh& tetMesh = *tetMeshPtr;
+
+    gTetMeshBuffers[gNumTetMeshBuffers] = piper->tetMeshBuffer;
+    gNumTetMeshBuffers++;
+
+    FmInitVertState(&tetMesh, piperTemplate.bufferTemplate.vertRestPositions, rotation, position, 1.0f, velocity);
+
+    FmInitTetState(&tetMesh, piperTemplate.bufferTemplate.tetVertIds, piperTemplate.bufferTemplate.defaultMaterialParams);
+
+    FmComputeMeshConstantMatrices(&tetMesh);
+
+    FmSetMassesFromRestDensities(&tetMesh);
+
+    FmInitConnectivity(&tetMesh, piperTemplate.bufferTemplate.vertIncidentTets);
+
+    FmFinishTetMeshInit(&tetMesh);
+
+#if TEST_CONDITION_NUMBERS
+    AMD::FmSceneControlParams defaultParams;
+    float meshCondition = AMD::FmCheckMaxTetMeshCondition(tire->tetMeshBuffer, defaultParams);
+    printf("Mesh condition number: %f\n", meshCondition);
+#endif
+}
+
+void AddPiperSimObjectToScene(PiperSimObject* panel, FmScene* scene)
+{
+    FmAddTetMeshBufferToScene(scene, panel->tetMeshBuffer);
+}
+
+void FreePiperSimObjectTemplate(PiperSimObjectTemplate* panelTemplate)
+{
+    delete[] panelTemplate->bufferTemplate.vertRestPositions;
+    delete[] panelTemplate->bufferTemplate.tetVertIds;
+    delete[] panelTemplate->bufferTemplate.vertIncidentTets;
+
+    FmDestroyBvh(panelTemplate->bufferTemplate.tetsBvh);
+}
+
+const uint gNumPiperInstance = 1;
+const uint gNumPiper = gNumPiperInstance * gNumInstances;
+PiperSimObject gPiper[gNumPiper];
+PiperSimObjectTemplate gPiperTemplate;
+
+TetMeshBufferTemplate* gPiperBufferTemplate = NULL;
+
 
 #if DUCKS_SCENE
 uint gNumObjects = 75;
@@ -1937,6 +2048,14 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
     InitTractorTireSimObjectTemplate(&gTractorTireTemplate, modelsPath);
     gTractorTireBufferTemplate = &gTractorTireTemplate.bufferTemplate;
 #endif
+   
+    // Piper  
+
+    InitPiperObjectTemplate(&gPiperTemplate, modelsPath);
+    gPiperBufferTemplate = &gPiperTemplate.bufferTemplate;
+
+
+
 
     // reset after external call to srand in setup
     srand(randomSeed);
@@ -2689,6 +2808,17 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
         }
     }
 #endif
+    
+    // Piper
+    rotation = FmMatrix3::identity();
+    FmVector3 position = FmInitVector3(230, 580, 0);
+    /*FmVector3 position = FmInitVector3((float)(instanceIdx - (int)(gNumInstances / 2)) * instanceSpacingX, 
+        params.distContactThreshold * 1.1f, 
+        woodPanelsSpacingZ * ((float)rowIdx - 0.5f * (gNumWoodPanelsPerInstance - 1)));*/
+
+    CreatePiperSimObject(&gPiper[0], gPiperTemplate, position, rotation, FmInitVector3(0.0f));
+    AddPiperSimObjectToScene(&gPiper[0], gScene);
+
 
 #if GLUE_TEST
     // Set up glue constraints between tet mesh and rigid body
@@ -3083,6 +3213,9 @@ void FreeScene()
 #if CARS_PANELS_TIRES_SCENE
     FreeTractorTireSimObjectTemplate(&gTractorTireTemplate);
 #endif
+
+    // Piper
+    FreePiperSimObjectTemplate(&gPiperTemplate);
 
     SampleDestroyTaskSystem();
 }

@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "LoadNodeEleMesh.h"
 #include <vector>
 #include <assert.h>
+#include <iostream>
 
 namespace AMD
 {
@@ -86,12 +87,14 @@ namespace AMD
             nodeIdx1--;
             nodeIdx2--;
             nodeIdx3--;
-
+            
             if (nodeIdx0 < 0 || nodeIdx0 >= numVerts
                 || nodeIdx1 < 0 || nodeIdx1 >= numVerts
                 || nodeIdx2 < 0 || nodeIdx2 >= numVerts
                 || nodeIdx3 < 0 || nodeIdx3 >= numVerts)
             {
+                std::cout << eleFile << " : problems to load ele # " << tetNumber << std::endl;
+
                 return -1;
             }
 

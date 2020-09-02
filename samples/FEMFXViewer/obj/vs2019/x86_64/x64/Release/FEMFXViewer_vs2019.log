@@ -1,1 +1,5 @@
-﻿  FEMFXViewer_vs2019.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\FEMFXViewer.exe
+﻿  TestScenes.cpp
+sample_task_system.lib(SampleTaskSystem.obj) : warning LNK4099: PDB 'sample_task_system.pdb' was not found with 'sample_task_system.lib(SampleTaskSystem.obj)' or at 'C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\sample_task_system.pdb'; linking object as if no debug info
+sample_task_system.lib(TLGetProcessorInfo.obj) : warning LNK4099: PDB 'sample_task_system.pdb' was not found with 'sample_task_system.lib(TLGetProcessorInfo.obj)' or at 'C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\sample_task_system.pdb'; linking object as if no debug info
+sample_task_system.lib(TLTaskSystem.obj) : warning LNK4099: PDB 'sample_task_system.pdb' was not found with 'sample_task_system.lib(TLTaskSystem.obj)' or at 'C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\sample_task_system.pdb'; linking object as if no debug info
+  FEMFXViewer_vs2019.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\FEMFXViewer.exe

@@ -50,8 +50,13 @@ namespace AMD
         float upperDeformationLimit;    // Value >= 1, or unlimited if = 0.  Constrains maximum scale of deformation.
 
         inline FmTetMaterialParams() :
-            restDensity(50.0f), youngsModulus(1.0e5f), poissonsRatio(0.25f),
-            plasticYieldThreshold(0.0f), plasticCreep(0.0f), plasticMin(0.5f), plasticMax(2.0f),
+            restDensity(50.0f), 
+            youngsModulus(1.0e5f), 
+            poissonsRatio(0.25f),
+            plasticYieldThreshold(0.0f), 
+            plasticCreep(0.0f), 
+            plasticMin(0.5f), 
+            plasticMax(2.0f),
             fractureStressThreshold(5.0e3f),
             maxUnconstrainedSolveIterations(FM_DEFAULT_MAX_CG_ITERATIONS),
             lowerDeformationLimit(0.0f),
