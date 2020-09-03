@@ -47,6 +47,16 @@ THE SOFTWARE.
 
 using namespace AMD;
 
+// Custom setting
+#define GROUND_HALF_SIZE        1000
+#define GROUND_COLOR            10
+#define CAMERA_LOOK_AT_BASE_X   15
+#define CAMERA_LOOK_AT_BASE_Y   15
+#define CAMERA_LOOK_AT_BASE_Z   15
+
+#define NEAR_PLANE              0.1f
+#define FAR_PLANE               10000
+
 // Config settings
 #define DRAW_ROTATIONS 0
 #define DRAW_DIST_CONTACTS 1
@@ -99,8 +109,8 @@ static bool gDrawFracturableFaces = true;
 
 static const int gWinWidth = 1280;
 static const int gWinHeight = 720;
-static const float gNearPlane = 0.1f;
-static const float gFarPlane = 250.0f;
+static const float gNearPlane = NEAR_PLANE;
+static const float gFarPlane = FAR_PLANE;
 static const float gFovY = 45.0f;
 static int gDragMode = -1;
 static float gCursorX = 0;
@@ -1223,8 +1233,10 @@ static void DrawScene()
 
 #if DRAW_GROUND
     const FmSceneControlParams& params = FmGetSceneControlParams(*gScene);
-    const float quadHalf = 20.0f;
-    glColor3f(0.6f, 0.6f, 0.6f);
+
+    const float quadHalf = GROUND_HALF_SIZE;
+
+    glColor3f(GROUND_COLOR, GROUND_COLOR, GROUND_COLOR);
     glBegin(GL_QUADS);
     glNormal3f(0.0f, 1.0f, 0.0f);
     glVertex3f(-quadHalf, params.collisionPlanes.minY, -quadHalf);
@@ -1291,9 +1303,10 @@ static void InitGLState()
     gViewerCam.SetLookAtY(4.0f);
     gViewerCam.SetLookAtZ(0.0f);
 #else
-    gViewerCam.SetLookAtX(lookatBaseX + 0.0f);
-    gViewerCam.SetLookAtY(lookatBaseY + 2.0f);
-    gViewerCam.SetLookAtZ(lookatBaseZ + 0.0f);
+    // set camera view
+    gViewerCam.SetLookAtX(lookatBaseX + 0.0f + CAMERA_LOOK_AT_BASE_X);
+    gViewerCam.SetLookAtY(lookatBaseY + 2.0f + CAMERA_LOOK_AT_BASE_Y);
+    gViewerCam.SetLookAtZ(lookatBaseZ + 0.0f + CAMERA_LOOK_AT_BASE_Z);
 #endif
     gViewerCam.SetRadius(25.0f);
 

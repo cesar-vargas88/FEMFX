@@ -1,3 +1,2 @@
-﻿  TestScenes.cpp
-C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1751,84): warning C4100: 'piperTemplate': unreferenced formal parameter
+﻿  FEMFXViewer.cpp
   FEMFXViewer_vs2019.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\FEMFXViewer.exe

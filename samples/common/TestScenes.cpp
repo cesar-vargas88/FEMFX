@@ -1,18 +1,14 @@
 /*
 MIT License
-
 Copyright (c) 2019 Advanced Micro Devices, Inc.
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -82,11 +78,11 @@ static void WriteTimings()
 FmTetMeshBuffer* gTetMeshBuffers[MAX_MESH_BUFFERS] = { NULL };
 uint             gNumTetMeshBuffers = 0;
 
-FmRigidBody*     gRigidBodies[MAX_RIGID_BODIES] = { NULL };
+FmRigidBody* gRigidBodies[MAX_RIGID_BODIES] = { NULL };
 uint             gNumRigidBodies = 0;
 
 
-FmScene*         gScene = NULL;
+FmScene* gScene = NULL;
 
 uint             gProjectileMeshBufferId = 0;
 #if WOOD_PANELS_SCENE
@@ -116,7 +112,7 @@ void InitBlockVerts(FmVector3* vertRestPositions, FmTetVertIds* tetVertIds,
 
 // Init TetMeshBufferTemplate from .node and .ele files
 void InitTetMeshBufferTemplate(
-    TetMeshBufferTemplate* bufferTemplate, 
+    TetMeshBufferTemplate* bufferTemplate,
     const FmTetMaterialParams& materialParams,
     uint collisionGroup,
     const char* modelsPath, const char* modelName,
@@ -251,7 +247,7 @@ void InitTetMeshBufferTemplate(
 }
 
 #if LOAD_FEM_ASSET
-FmTetMeshBuffer* CreateTetMeshBuffer(FComponentResources& componentResources, 
+FmTetMeshBuffer* CreateTetMeshBuffer(FComponentResources& componentResources,
     const FmTetMaterialParams& defaultMaterial,
     const FmVector3& position, const FmMatrix3& rotation, const FmVector3& velocity, float massOverride,
     bool enablePlasticity, bool enableFracture, bool isKinematic,
@@ -286,7 +282,7 @@ FmTetMeshBuffer* CreateTetMeshBuffer(FComponentResources& componentResources,
     {
         tetFlags[tidx] = 0;
         memcpy(&tetVertIds[tidx], &componentResources.tetVertIds[tetIdBytePos], sizeof(FmTetVertIds));
-        tetIdBytePos += sizeof(FmTetVertIds);        
+        tetIdBytePos += sizeof(FmTetVertIds);
     }
 
     //SortByPartition(componentResources.VertPermutation, componentResources.TetPermutation,
@@ -469,7 +465,7 @@ struct CarSimObject
     static const uint numPlaneConstraints = 1 + 10;
 
     // Tet mesh buffers to be added to scene
-    FmTetMeshBuffer*            tetMeshBuffers[numTetMeshBuffers];
+    FmTetMeshBuffer* tetMeshBuffers[numTetMeshBuffers];
     uint                           tetMeshBufferIds[numTetMeshBuffers];
 
     // Will be copied into scene
@@ -479,7 +475,7 @@ struct CarSimObject
     float hoodLatchMaxImpulseMag;
 
     // Pointers to scene objects when added to scene
-    FmRigidBody*  rigidBodies[numRigidBodies];
+    FmRigidBody* rigidBodies[numRigidBodies];
     uint          rigidBodyIds[numRigidBodies];
     uint          axelAngleConstraints[numRimAxelAngleConstraints];
     uint          bodyHoodGlueConstraints[numBodyHoodGlueConstraints];
@@ -1232,7 +1228,7 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
 #if CARS_PANELS_TIRES_SCENE
 const uint gNumInstances = NUM_INSTANCES;
 const uint gNumCarsPerInstance = NUM_CARS_PER_INSTANCE;
-uint gNumCars = gNumCarsPerInstance*gNumInstances;
+uint gNumCars = gNumCarsPerInstance * gNumInstances;
 #else
 uint gNumCars = NUM_CARS;
 #endif
@@ -1482,7 +1478,7 @@ void FreeWoodPanelSimObjectTemplate(WoodPanelSimObjectTemplate* panelTemplate)
 
 #if CARS_PANELS_TIRES_SCENE
 const uint gNumWoodPanelsPerInstance = NUM_WOOD_PANELS_PER_INSTANCE;
-const uint gNumWoodPanels = gNumWoodPanelsPerInstance*gNumInstances;
+const uint gNumWoodPanels = gNumWoodPanelsPerInstance * gNumInstances;
 #else
 const uint gNumWoodPanels = NUM_WOOD_PANELS;
 #endif
@@ -1563,7 +1559,7 @@ void FreeTractorTireSimObjectTemplate(TractorTireSimObjectTemplate* panelTemplat
 }
 
 const uint gNumTractorTiresPerInstance = NUM_TRACTOR_TIRES;
-const uint gNumTractorTires = gNumTractorTiresPerInstance*gNumInstances;
+const uint gNumTractorTires = gNumTractorTiresPerInstance * gNumInstances;
 TractorTireSimObject gTractorTires[gNumTractorTires];
 TractorTireSimObjectTemplate gTractorTireTemplate;
 
@@ -1571,217 +1567,103 @@ TractorTireSimObjectTemplate gTractorTireTemplate;
 
 
 
-// Piper - definition
-
-struct PiperSimObject
-{
-    static const uint numTetMeshBuffers = 7;  // C1, C2 .... C7
-    static const uint numRigidBodies = 7;
-
-    // Tet mesh buffers to be added to scene
-    FmTetMeshBuffer* tetMeshBuffers[numTetMeshBuffers];
-    uint tetMeshBufferIds[numTetMeshBuffers];
-
-    // Will be copied into scene
-    FmRigidBodySetupParams rigidBodySetupParams[numRigidBodies];
-
-    // Pointers to scene objects when added to scene
-    FmRigidBody* rigidBodies[numRigidBodies];
-    uint          rigidBodyIds[numRigidBodies];
-
-    FmVector3 initialPosition;
-    FmMatrix3 initialRotation;
-
-    PiperSimObject()
-    {
-        memset(this, 0, sizeof(PiperSimObject));
-    }
-};
+// Piper 
 
 struct PiperSimObjectTemplate
 {
-    TetMeshBufferTemplate tetMeshBufferTemplates[CarSimObject::numTetMeshBuffers];
-    FmRigidBodySetupParams rigidBodySetupParams[CarSimObject::numRigidBodies];
+    TetMeshBufferTemplate bufferTemplate;
 };
 
-void InitPiperSimObjectTemplate(PiperSimObjectTemplate* piperTemplate, const char* modelsPath)
+struct PiperSimObject
 {
-    // Load geometry and set parameters for FEM tet mesh buffers
-    for (uint piperSubIdx = 0; piperSubIdx < PiperSimObject::numTetMeshBuffers; piperSubIdx++) 
-    {
-        bool enablePlasticity = false;
-        bool enableFracture = true;
-        bool isKinematic = false;
+    FmTetMeshBuffer* tetMeshBuffer;
+};
 
-        const char* fileName = NULL;
-        FmTetMaterialParams materialParams;
+void InitPiperObjectTemplate(PiperSimObjectTemplate* PiperTemplate, const char* modelsPath)
+{
+    FmVector3 position = FmInitVector3(0.0f);
+    FmVector3 velocity = FmInitVector3(0.0f);
+    FmMatrix3 rotation = FmMatrix3::identity();
 
-        switch (piperSubIdx)
-        {
-            case 0:
-                fileName = "piper2/C1.1";
-                materialParams.restDensity = 1000.0f;
-                materialParams.youngsModulus = 2.5e7f;
-                materialParams.poissonsRatio = 0.495f;
-                break;
-            case 1:
-                fileName = "piper2/C2.1";
-                materialParams.restDensity = 1000.0f;
-                materialParams.youngsModulus = 2.5e7f;
-                materialParams.poissonsRatio = 0.495f;
-                break;
-            case 2:
-                fileName = "piper2/C3.1";
-                materialParams.restDensity = 1000.0f;
-                materialParams.youngsModulus = 2.5e7f;
-                materialParams.poissonsRatio = 0.495f;
-                break;
-            case 3:
-                fileName = "piper2/C4.1";
-                materialParams.restDensity = 1000.0f;
-                materialParams.youngsModulus = 2.5e7f;
-                materialParams.poissonsRatio = 0.495f;
-                break;
-            case 4:
-                fileName = "piper2/C5.1";
-                materialParams.restDensity = 1000.0f;
-                materialParams.youngsModulus = 2.5e7f;
-                materialParams.poissonsRatio = 0.495f;
-                break;
-            case 5:
-                fileName = "piper2/C6.1";
-                materialParams.restDensity = 1000.0f;
-                materialParams.youngsModulus = 2.5e7f;
-                materialParams.poissonsRatio = 0.495f;
-                break;
-            case 6:
-                fileName = "piper2/C7.1";
-                materialParams.restDensity = 1000.0f;
-                materialParams.youngsModulus = 2.5e7f;
-                materialParams.poissonsRatio = 0.495f;
-                break;
-        }
-        
-        uint collisionGroup = 0;
+    FmTetMaterialParams materialParams;
+    // Hueso sano
+    materialParams.restDensity = 1000.0f;
+    materialParams.youngsModulus = 2.5e7f;
+    materialParams.poissonsRatio = 0.495f;
 
-        TetMeshBufferTemplate& meshBufferTemplate = piperTemplate->tetMeshBufferTemplates[piperSubIdx];
-        InitTetMeshBufferTemplate(&meshBufferTemplate, materialParams, collisionGroup, modelsPath, fileName, enablePlasticity, enableFracture, isKinematic);
+    // Hueso malo
+    //materialParams.restDensity = 1400.0f;                   // Density at rest
+    //materialParams.youngsModulus = 7.5e7f;                  // Greater values will increase stiffness of material
+    //materialParams.poissonsRatio = 0.495f;                  // Value must be < 0.5.  Defines how much material bulges when compressed, with 0 causing none.  Values closer to 0.5 worsen conditioning and require more iterations.
+    //materialParams.plasticYieldThreshold = 0.0f;            // Threshold for stress magnitude where plastic deformation starts.
+    //materialParams.plasticCreep = 0.0f;                     // Value >= 0 and <=1.  Portion of elastic deformation converted to plastic is creep * (stress_mag - yield)/stress_mag
+    //materialParams.plasticMin = 0.0f;                       // Value > 0 and <= 1.  Minimum scale of compression from plastic deformation.  Smaller values allow greater plastic deformation but may worsen conditioning.
+    //materialParams.plasticMax = 0.0f;                       // Value >= 1.  Maximum scale of stretch from plastic deformation.   Larger values allow greater plastic deformation but may worsen conditioning.
+    //materialParams.fractureStressThreshold = 0.0f;          // Threshold for stress max eigenvalue where fracture occurs
+    //materialParams.maxUnconstrainedSolveIterations = 0.0f;// Maximum number of CG iterations to use with this material
+    //materialParams.lowerDeformationLimit = 0.0f;            // Value > 0 and <= 1, or unlimited if = 0.  Constrains minimum scale of deformation.
+    //materialParams.upperDeformationLimit = 0.0f;            // Value >= 1, or unlimited if = 0.  Constrains maximum scale of deformation.
 
-        FmVector3 minPos = meshBufferTemplate.vertRestPositions[0];
-        FmVector3 maxPos = meshBufferTemplate.vertRestPositions[0];
-        uint numVerts = meshBufferTemplate.setupParams.numVerts;
+    // Soft tissue
+    //materialParams.restDensity = 1000.0f;
+    //materialParams.youngsModulus = 5.0e6f;
+    //materialParams.poissonsRatio = 0.495f;
 
-        for (uint vIdx = 0; vIdx < numVerts; vIdx++)
-        {
-            minPos = min(minPos, meshBufferTemplate.vertRestPositions[vIdx]);
-            maxPos = max(maxPos, meshBufferTemplate.vertRestPositions[vIdx]);
-        }
-    }
+    uint collisionGroup = 0;
+    InitTetMeshBufferTemplate(&PiperTemplate->bufferTemplate, materialParams, collisionGroup, modelsPath, "piper/C7.1", false, false, false);
 }
 
-void FreePiperSimObjectTemplate(PiperSimObjectTemplate* piperTemplate)
+void CreatePiperSimObject(PiperSimObject* piper, const PiperSimObjectTemplate& piperTemplate, const FmVector3& position, const FmMatrix3& rotation, const FmVector3& velocity)
 {
-    for (uint i = 0; i < PiperSimObject::numTetMeshBuffers; i++)
-    {
-        piperTemplate->tetMeshBufferTemplates[i].Destroy();
-    }
-}
+    // Set up a single memory buffer to hold all tet mesh data
 
-void CreatePiperSimObject(PiperSimObject* piper, PiperSimObjectTemplate& piperTemplate, const FmVector3& position, const FmMatrix3& rotation, const FmVector3& velocity)
-{
-    piper->initialPosition = position;
-    piper->initialRotation = rotation;
+    FmTetMesh* tetMeshPtr = NULL;
+    piper->tetMeshBuffer = FmCreateTetMeshBuffer(piperTemplate.bufferTemplate.setupParams, piperTemplate.bufferTemplate.fractureGroupCounts, piperTemplate.bufferTemplate.tetFractureGroupIds, &tetMeshPtr);
+    FmTetMesh& tetMesh = *tetMeshPtr;
 
-    for (uint piperSubIdx = 0; piperSubIdx < CarSimObject::numTetMeshBuffers; piperSubIdx++)
-    {
-        TetMeshBufferTemplate& meshBufferTemplate = piperTemplate.tetMeshBufferTemplates[piperSubIdx];
+    gTetMeshBuffers[gNumTetMeshBuffers] = piper->tetMeshBuffer;
+    gNumTetMeshBuffers++;
 
-        uint numVerts = meshBufferTemplate.setupParams.numVerts;
+    FmInitVertState(&tetMesh, piperTemplate.bufferTemplate.vertRestPositions, rotation, position, 1.0f, velocity);
 
-        FmTetMesh* tetMeshPtr;
-        FmTetMeshBuffer* tetMeshBuffer = FmCreateTetMeshBuffer(meshBufferTemplate.setupParams, meshBufferTemplate.fractureGroupCounts, meshBufferTemplate.tetFractureGroupIds, &tetMeshPtr);
+    FmInitTetState(&tetMesh, piperTemplate.bufferTemplate.tetVertIds, piperTemplate.bufferTemplate.defaultMaterialParams);
 
-        gTetMeshBuffers[gNumTetMeshBuffers] = tetMeshBuffer;
-        gNumTetMeshBuffers++;
+    FmComputeMeshConstantMatrices(&tetMesh);
 
-        FmTetMesh& tetMesh = *tetMeshPtr;
+    FmSetMassesFromRestDensities(&tetMesh);
 
-        FmVector3 minPos = meshBufferTemplate.vertRestPositions[0];
-        FmVector3 maxPos = meshBufferTemplate.vertRestPositions[0];
-        for (uint vIdx = 0; vIdx < numVerts; vIdx++)
-        {
-            minPos = min(minPos, meshBufferTemplate.vertRestPositions[vIdx]);
-            maxPos = max(maxPos, meshBufferTemplate.vertRestPositions[vIdx]);
-        }
+    FmInitConnectivity(&tetMesh, piperTemplate.bufferTemplate.vertIncidentTets);
 
-        FmInitVertState(&tetMesh, meshBufferTemplate.vertRestPositions, rotation, position, 1.0f, velocity);
-
-        FmInitTetState(&tetMesh, meshBufferTemplate.tetVertIds, meshBufferTemplate.defaultMaterialParams, 0.6f);
-
-        FmComputeMeshConstantMatrices(&tetMesh);
-
-        FmSetMassesFromRestDensities(&tetMesh);
-
-        FmInitConnectivity(&tetMesh, meshBufferTemplate.vertIncidentTets);
-
-        FmFinishTetMeshInit(&tetMesh);
+    FmFinishTetMeshInit(&tetMesh);
 
 #if TEST_CONDITION_NUMBERS
-        AMD::FmSceneControlParams defaultParams;
-        float meshCondition = AMD::FmCheckMaxTetMeshCondition(tetMeshBuffer, defaultParams);
-        printf("Mesh condition number: %f\n", meshCondition);
+    AMD::FmSceneControlParams defaultParams;
+    float meshCondition = AMD::FmCheckMaxTetMeshCondition(tire->tetMeshBuffer, defaultParams);
+    printf("Mesh condition number: %f\n", meshCondition);
 #endif
-
-        piper->tetMeshBuffers[piperSubIdx] = tetMeshBuffer;
-    }
-
-    FmQuat quat = FmQuat(rotation);
-
-    for (uint rbIdx = 0; rbIdx < CarSimObject::numRigidBodies; rbIdx++)
-    {
-        FmRigidBodySetupParams& rigidBodySetupParams = piper->rigidBodySetupParams[rbIdx];
-
-        rigidBodySetupParams = piperTemplate.rigidBodySetupParams[rbIdx];
-        rigidBodySetupParams.state.pos = position + mul(rotation, rigidBodySetupParams.state.pos);
-        rigidBodySetupParams.state.vel = velocity;
-        rigidBodySetupParams.state.quat = mul(quat, rigidBodySetupParams.state.quat);
-    }
 }
 
-void AddPiperSimObjectToScene(PiperSimObject* piper, const PiperSimObjectTemplate& piperTemplate, FmScene* scene)
+void AddPiperSimObjectToScene(PiperSimObject* panel, FmScene* scene)
 {
-    for (uint meshBufferIdx = 0; meshBufferIdx < CarSimObject::numTetMeshBuffers; meshBufferIdx++)
-    {
-        uint bufferId = FmAddTetMeshBufferToScene(scene, piper->tetMeshBuffers[meshBufferIdx]);
-        piper->tetMeshBufferIds[meshBufferIdx] = bufferId;
-        FM_ASSERT(bufferId != FM_INVALID_ID);
-    }
-
-    for (uint rbIdx = 0; rbIdx < CarSimObject::numRigidBodies; rbIdx++)
-    {
-        FmRigidBody* rigidBody = FmCreateRigidBody(piper->rigidBodySetupParams[rbIdx]);
-
-        piper->rigidBodies[rbIdx] = rigidBody;
-
-        piper->rigidBodyIds[rbIdx] = FmAddRigidBodyToScene(gScene, rigidBody);
-
-        gRigidBodies[gNumRigidBodies] = rigidBody;
-        gNumRigidBodies++;
-    }
-
-    //FmAddTetMeshBufferToScene(scene, panel->tetMeshBuffer);
+    FmAddTetMeshBufferToScene(scene, panel->tetMeshBuffer);
 }
 
-const uint gNumPiperPerInstance = 1;
-const uint gNumPiper = gNumCarsPerInstance * gNumInstances;
+void FreePiperSimObjectTemplate(PiperSimObjectTemplate* panelTemplate)
+{
+    delete[] panelTemplate->bufferTemplate.vertRestPositions;
+    delete[] panelTemplate->bufferTemplate.tetVertIds;
+    delete[] panelTemplate->bufferTemplate.vertIncidentTets;
 
-PiperSimObject* gPipers = NULL;
+    FmDestroyBvh(panelTemplate->bufferTemplate.tetsBvh);
+}
+
+const uint gNumPiperInstance = 1;
+const uint gNumPiper = gNumPiperInstance * gNumInstances;
+//PiperSimObject gPiper[gNumPiper];
+PiperSimObject gPiper;
 PiperSimObjectTemplate gPiperTemplate;
-TetMeshBufferTemplate* gPiperTemplates[8] = { NULL };
 
-
-
-
+TetMeshBufferTemplate* gPiperBufferTemplate = NULL;
 
 
 #if DUCKS_SCENE
@@ -1861,7 +1743,7 @@ static const float gProjectileZ = 0.5f;
 void GetBlockMeshCounts(uint* numVerts, uint* numTets, uint numCubesX, uint numCubesY, uint numCubesZ)
 {
     *numVerts = (numCubesX + 1) * (numCubesY + 1) * (numCubesZ + 1);
-    *numTets = 6 * numCubesX*numCubesY*numCubesZ;
+    *numTets = 6 * numCubesX * numCubesY * numCubesZ;
 }
 
 void CreateBlockMesh(FmArray<uint>* vertIncidentTets, uint numCubesX, uint numCubesY, uint numCubesZ)
@@ -1872,46 +1754,46 @@ void CreateBlockMesh(FmArray<uint>* vertIncidentTets, uint numCubesX, uint numCu
         {
             for (uint i = 0; i < numCubesX; i++)
             {
-                int v0 = (i + j*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v1 = ((i + 1) + j*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v2 = ((i + 1) + j*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
-                int v3 = (i + j*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
-                int v4 = (i + (j + 1)*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v5 = ((i + 1) + (j + 1)*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v6 = ((i + 1) + (j + 1)*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
-                int v7 = (i + (j + 1)*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
+                int v0 = (i + j * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v1 = ((i + 1) + j * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v2 = ((i + 1) + j * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
+                int v3 = (i + j * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
+                int v4 = (i + (j + 1) * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v5 = ((i + 1) + (j + 1) * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v6 = ((i + 1) + (j + 1) * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
+                int v7 = (i + (j + 1) * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
 
-                int tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY));
+                int tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY));
                 FmAddIncidentTetToSet(vertIncidentTets[v0], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v1], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v3], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v4], tetId);
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 1;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 1;
                 FmAddIncidentTetToSet(vertIncidentTets[v1], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v3], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v4], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v5], tetId);
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 2;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 2;
                 FmAddIncidentTetToSet(vertIncidentTets[v3], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v5], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v7], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v4], tetId);
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 3;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 3;
                 FmAddIncidentTetToSet(vertIncidentTets[v1], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v2], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v3], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v5], tetId);
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 4;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 4;
                 FmAddIncidentTetToSet(vertIncidentTets[v3], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v2], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v7], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v5], tetId);
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 5;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 5;
                 FmAddIncidentTetToSet(vertIncidentTets[v2], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v7], tetId);
                 FmAddIncidentTetToSet(vertIncidentTets[v5], tetId);
@@ -1921,19 +1803,19 @@ void CreateBlockMesh(FmArray<uint>* vertIncidentTets, uint numCubesX, uint numCu
     }
 }
 
-void InitBlockVerts(FmVector3* vertRestPositions, FmTetVertIds* tetVertIds, 
+void InitBlockVerts(FmVector3* vertRestPositions, FmTetVertIds* tetVertIds,
     uint numCubesX, uint numCubesY, uint numCubesZ,
     float cubeDimX, float cubeDimY, float cubeDimZ, float scale, bool randomize)
 {
     for (uint i = 0; i < numCubesX + 1; i++)
     {
-        float biasY = 0.2f*cubeDimY*randfloat2();
+        float biasY = 0.2f * cubeDimY * randfloat2();
 
         for (uint k = 0; k < numCubesZ + 1; k++)
         {
             for (uint j = 0; j < numCubesY + 1; j++)
             {
-                int v0 = (i + j*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
+                int v0 = (i + j * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
 
                 float x = cubeDimX * i;
                 float y = cubeDimY * j;
@@ -1943,7 +1825,7 @@ void InitBlockVerts(FmVector3* vertRestPositions, FmTetVertIds* tetVertIds,
                 {
                     if (i > 0 && i < numCubesX)
                     {
-                        x += 0.2f*cubeDimX*randfloat2();
+                        x += 0.2f * cubeDimX * randfloat2();
 
                         if (x < 0.0f)
                         {
@@ -1957,7 +1839,7 @@ void InitBlockVerts(FmVector3* vertRestPositions, FmTetVertIds* tetVertIds,
 
                     if (j > 0 && j < numCubesY)
                     {
-                        y += 0.2f*cubeDimY*randfloat2() + biasY;
+                        y += 0.2f * cubeDimY * randfloat2() + biasY;
 
                         if (y < 0.0f)
                         {
@@ -1981,46 +1863,46 @@ void InitBlockVerts(FmVector3* vertRestPositions, FmTetVertIds* tetVertIds,
         {
             for (uint i = 0; i < numCubesX; i++)
             {
-                int v0 = (i + j*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v1 = ((i + 1) + j*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v2 = ((i + 1) + j*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
-                int v3 = (i + j*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
-                int v4 = (i + (j + 1)*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v5 = ((i + 1) + (j + 1)*(numCubesX + 1) + k*(numCubesX + 1)*(numCubesY + 1));
-                int v6 = ((i + 1) + (j + 1)*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
-                int v7 = (i + (j + 1)*(numCubesX + 1) + (k + 1)*(numCubesX + 1)*(numCubesY + 1));
+                int v0 = (i + j * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v1 = ((i + 1) + j * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v2 = ((i + 1) + j * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
+                int v3 = (i + j * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
+                int v4 = (i + (j + 1) * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v5 = ((i + 1) + (j + 1) * (numCubesX + 1) + k * (numCubesX + 1) * (numCubesY + 1));
+                int v6 = ((i + 1) + (j + 1) * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
+                int v7 = (i + (j + 1) * (numCubesX + 1) + (k + 1) * (numCubesX + 1) * (numCubesY + 1));
 
-                int tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY));
+                int tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY));
                 tetVertIds[tetId].ids[0] = v0;
                 tetVertIds[tetId].ids[1] = v1;
                 tetVertIds[tetId].ids[2] = v3;
                 tetVertIds[tetId].ids[3] = v4;
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 1;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 1;
                 tetVertIds[tetId].ids[0] = v1;
                 tetVertIds[tetId].ids[1] = v3;
                 tetVertIds[tetId].ids[2] = v4;
                 tetVertIds[tetId].ids[3] = v5;
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 2;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 2;
                 tetVertIds[tetId].ids[0] = v3;
                 tetVertIds[tetId].ids[1] = v5;
                 tetVertIds[tetId].ids[2] = v7;
                 tetVertIds[tetId].ids[3] = v4;
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 3;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 3;
                 tetVertIds[tetId].ids[0] = v1;
                 tetVertIds[tetId].ids[1] = v2;
                 tetVertIds[tetId].ids[2] = v3;
                 tetVertIds[tetId].ids[3] = v5;
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 4;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 4;
                 tetVertIds[tetId].ids[0] = v3;
                 tetVertIds[tetId].ids[1] = v2;
                 tetVertIds[tetId].ids[2] = v7;
                 tetVertIds[tetId].ids[3] = v5;
 
-                tetId = 6 * (i + j*numCubesX + k*(numCubesX*numCubesY)) + 5;
+                tetId = 6 * (i + j * numCubesX + k * (numCubesX * numCubesY)) + 5;
                 tetVertIds[tetId].ids[0] = v2;
                 tetVertIds[tetId].ids[1] = v7;
                 tetVertIds[tetId].ids[2] = v5;
@@ -2063,7 +1945,7 @@ void FireProjectile(const FmMatrix3& viewRotation, const FmVector3& viewPosition
             posOffset += FmInitVector3(gWoodPanelsRowSpacing, 0.0f, 0.0f) * (float)meshId;
 #endif
             rotation = FmMatrix3::identity();
-            direction = normalize(FmInitVector3(randfloat2()*0.05f, randfloat2()*0.05f, 1.0f));
+            direction = normalize(FmInitVector3(randfloat2() * 0.05f, randfloat2() * 0.05f, 1.0f));
         }
         else
         {
@@ -2071,15 +1953,15 @@ void FireProjectile(const FmMatrix3& viewRotation, const FmVector3& viewPosition
                 FmInitVector3(viewRotation.col0.x, viewRotation.col0.y, viewRotation.col0.z),
                 FmInitVector3(viewRotation.col1.x, viewRotation.col1.y, viewRotation.col1.z),
                 FmInitVector3(viewRotation.col2.x, viewRotation.col2.y, viewRotation.col2.z));
-            posOffset = FmInitVector3(viewPosition.x, viewPosition.y, viewPosition.z) + mul(rotation, FmInitVector3(-0.5f*cubeX, -0.5f*cubeY, 0.5f*cubeZ));
+            posOffset = FmInitVector3(viewPosition.x, viewPosition.y, viewPosition.z) + mul(rotation, FmInitVector3(-0.5f * cubeX, -0.5f * cubeY, 0.5f * cubeZ));
             direction = FmInitVector3(-viewRotation.col2.x, -viewRotation.col2.y, -viewRotation.col2.z);
         }
 
         FmResetFromRestPositions(gScene, &tetMesh, rotation, posOffset, direction * speed);
     }
-}
+    }
 #else
-void FireProjectile(const FmMatrix3& viewRotation, const FmVector3& viewPosition, float speed, bool fixedPosForWoodPanels)
+void FireProjectile(const FmMatrix3 & viewRotation, const FmVector3 & viewPosition, float speed, bool fixedPosForWoodPanels)
 {
     (void)viewRotation;
     (void)viewPosition;
@@ -2153,17 +2035,12 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
     InitTractorTireSimObjectTemplate(&gTractorTireTemplate, modelsPath);
     gTractorTireBufferTemplate = &gTractorTireTemplate.bufferTemplate;
 #endif
-   
-    // Piper - Init sim object
-    gPipers = new PiperSimObject[1];
 
-    InitPiperSimObjectTemplate(&gPiperTemplate, modelsPath);
+    // Piper  
 
-    for (uint i = 0; i <8; i++)
-    {
-        gPiperTemplates[i] = &gPiperTemplate.tetMeshBufferTemplates[i];
-    }
-    
+    InitPiperObjectTemplate(&gPiperTemplate, modelsPath);
+    gPiperBufferTemplate = &gPiperTemplate.bufferTemplate;
+
 
 
 
@@ -2187,7 +2064,7 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
     sceneParams.maxBroadPhasePairs = MAX_BROAD_PHASE_PAIRS;
     sceneParams.maxRigidBodyBroadPhasePairs = MAX_BROAD_PHASE_PAIRS;
     sceneParams.maxSceneVerts = MAX_VERTS_PER_MESH_BUFFER * MAX_MESH_BUFFERS;
-    sceneParams.maxTetMeshBufferFeatures = MAX_VERTS_PER_MESH_BUFFER*4;
+    sceneParams.maxTetMeshBufferFeatures = MAX_VERTS_PER_MESH_BUFFER * 4;
     sceneParams.numWorkerThreads = numThreads;
 
     sceneParams.maxConstraintSolverDataSize = 100000000;// FmEstimateSceneConstraintSolverDataSize(sceneParams);
@@ -2485,7 +2362,7 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
         const float cubeZ = gProjectileZ;
 
         rotation = FmMatrix3::identity();
-        posOffset += FmInitVector3(-1000.0f, 0.0f, 0.0f) + FmInitVector3(10.0f, 0.0f, 0.0f)*(float)meshBufferIdx;
+        posOffset += FmInitVector3(-1000.0f, 0.0f, 0.0f) + FmInitVector3(10.0f, 0.0f, 0.0f) * (float)meshBufferIdx;
 
         FmInitVertState(&tetMesh, vertRestPositions, rotation, posOffset, 1.0f, velOffset);
 
@@ -2509,12 +2386,12 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
 #if KINEMATIC_TEST
         posOffset = FmInitVector3(0.0f, 1.00299f, 0.0f) * (float)blockIdx + FmInitVector3(8.0f, 0.0f, 0.0f) * (float)((int)columnIdx - (int)gNumColumns / 2);
 #else
-        posOffset = FmInitVector3(0.0f, 2.0f, 0.0f) * (float)blockIdx + FmInitVector3(8.0f, 0.0f, 0.0f) * (float)((int)columnIdx - (int)gNumColumns/2);
+        posOffset = FmInitVector3(0.0f, 2.0f, 0.0f) * (float)blockIdx + FmInitVector3(8.0f, 0.0f, 0.0f) * (float)((int)columnIdx - (int)gNumColumns / 2);
         posOffset.x += randfloat2() * 0.2f;
         posOffset.y += randfloat2() * 0.2f;
         posOffset.z += randfloat2() * 0.2f;
 #endif
-        rotation = FmMatrix3::rotationY(FM_PI/2.0f);
+        rotation = FmMatrix3::rotationY(FM_PI / 2.0f);
 
         velOffset = FmInitVector3(0.0f, 0.0f, 0.0f);
 
@@ -2655,7 +2532,7 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
 #else
         float offsetY = (rbIdx / 2) * 3.0f * gDeltaY + (rbIdx % 2) * gDeltaY;
         rigidBodyState.pos = FmInitVector3(0.0f, 3.5f, -0.5f) + FmInitVector3(0.0, offsetY, 0.0f);// *(float)rbIdx;
-        rigidBodyState.pos += FmInitVector3(0.5f*randfloat2(), 0.0f, 0.0f);
+        rigidBodyState.pos += FmInitVector3(0.5f * randfloat2(), 0.0f, 0.0f);
         rigidBodyState.quat = normalize(FmQuat(0.0f, 0.0f, 0.0f, 1.0f));
         rigidBodyState.vel = FmInitVector3(0.0f);
         rigidBodyState.angVel = FmInitVector3(0.0f);
@@ -2883,7 +2760,7 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
 #if CARS_PANELS_TIRES_SCENE
     // Create tractor tire instances and place in scene
     uint numTireStacksPerInstance = NUM_TRACTOR_TIRE_STACKS;
-    uint numTireStacks = numTireStacksPerInstance*gNumInstances;
+    uint numTireStacks = numTireStacksPerInstance * gNumInstances;
 
     uint tireObjectIdx = 0;
     float tireStackSpacing = 4.0f;
@@ -2899,7 +2776,7 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
         {
             uint numOnLevel = TRACTOR_TIRE_STACK_BASE - levelIdx;
             //float height = TRACTOR_TIRE_HALF_DEPTH*2.0f * levelIdx;
-            float gapY = TRACTOR_TIRE_HALF_DEPTH*2.0f;
+            float gapY = TRACTOR_TIRE_HALF_DEPTH * 2.0f;
             float height = gapY * levelIdx * 2.0f;
             float gapX = TRACTOR_TIRE_RADIUS * 2.05f;
             float minX = -0.5f * (numOnLevel - 1) * gapX;
@@ -2918,14 +2795,13 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
         }
     }
 #endif
-    
-    // Piper - Create and add sim object
+
+    // Piper
     rotation = FmMatrix3::identity();
     FmVector3 position = FmInitVector3(230, 580, 0);
-    FmVector3 velocity = FmInitVector3(0.0f);
 
-    CreatePiperSimObject(&gPipers[0], gPiperTemplate, position, rotation, velocity);
-    AddPiperSimObjectToScene(&gPipers[0], gPiperTemplate, gScene);
+    CreatePiperSimObject(&gPiper, gPiperTemplate, position, rotation, FmInitVector3(0.0f));
+    AddPiperSimObjectToScene(&gPiper, gScene);
 
 #if GLUE_TEST
     // Set up glue constraints between tet mesh and rigid body
@@ -3018,10 +2894,10 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
         FmTetVertIds tetVertIdsA = FmGetTetVertIds(tetMeshA, glueConstraint.bufferTetIdA);
 
         FmVector3 worldPos = FmInterpolate(glueConstraint.posBaryA,
-                FmGetVertPosition(tetMeshA, tetVertIdsA.ids[0]),
-                FmGetVertPosition(tetMeshA, tetVertIdsA.ids[1]),
-                FmGetVertPosition(tetMeshA, tetVertIdsA.ids[2]),
-                FmGetVertPosition(tetMeshA, tetVertIdsA.ids[3]));
+            FmGetVertPosition(tetMeshA, tetVertIdsA.ids[0]),
+            FmGetVertPosition(tetMeshA, tetVertIdsA.ids[1]),
+            FmGetVertPosition(tetMeshA, tetVertIdsA.ids[2]),
+            FmGetVertPosition(tetMeshA, tetVertIdsA.ids[3]));
 
         FmRigidBodyState state = FmGetState(*FmGetRigidBody(*gScene, 0 | FM_RB_FLAG));
         FmVector3 posBodySpaceB = rotate(conj(state.quat), worldPos - state.pos);
@@ -3321,11 +3197,8 @@ void FreeScene()
     FreeTractorTireSimObjectTemplate(&gTractorTireTemplate);
 #endif
 
-    // Piper free sim object
-    delete[] gPipers;
+    // Piper
     FreePiperSimObjectTemplate(&gPiperTemplate);
-    for (uint i = 0; i < 8; i++)
-    {
-        gPiperTemplates[i] = NULL;
-    }
+
+    SampleDestroyTaskSystem();
 }
