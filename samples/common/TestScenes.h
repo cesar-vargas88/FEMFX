@@ -27,6 +27,12 @@ THE SOFTWARE.
 #include "AMD_FEMFX.h"
 #include "FEMFXArray.h"
 
+
+// Add piper to the scene
+#define PIPER_IN_SCENE  0
+
+
+
 // Scene options - select only one
 
 #ifndef FEMFX_VIEWER_ENV_SET

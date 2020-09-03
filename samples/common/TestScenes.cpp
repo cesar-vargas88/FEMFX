@@ -1565,9 +1565,7 @@ TractorTireSimObjectTemplate gTractorTireTemplate;
 
 #endif
 
-
-
-// Piper 
+#if PIPER_IN_SCENE
 
 struct PiperSimObjectTemplate
 {
@@ -1657,13 +1655,12 @@ void FreePiperSimObjectTemplate(PiperSimObjectTemplate* panelTemplate)
     FmDestroyBvh(panelTemplate->bufferTemplate.tetsBvh);
 }
 
-const uint gNumPiperInstance = 1;
-const uint gNumPiper = gNumPiperInstance * gNumInstances;
-//PiperSimObject gPiper[gNumPiper];
 PiperSimObject gPiper;
 PiperSimObjectTemplate gPiperTemplate;
 
 TetMeshBufferTemplate* gPiperBufferTemplate = NULL;
+
+#endif
 
 
 #if DUCKS_SCENE
@@ -2036,13 +2033,12 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
     gTractorTireBufferTemplate = &gTractorTireTemplate.bufferTemplate;
 #endif
 
-    // Piper  
+#if PIPER_IN_SCENE 
 
     InitPiperObjectTemplate(&gPiperTemplate, modelsPath);
     gPiperBufferTemplate = &gPiperTemplate.bufferTemplate;
 
-
-
+#endif
 
     // reset after external call to srand in setup
     srand(randomSeed);
@@ -2796,12 +2792,15 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
     }
 #endif
 
-    // Piper
+#if PIPER_IN_SCENE
+
     rotation = FmMatrix3::identity();
     FmVector3 position = FmInitVector3(230, 580, 0);
 
     CreatePiperSimObject(&gPiper, gPiperTemplate, position, rotation, FmInitVector3(0.0f));
     AddPiperSimObjectToScene(&gPiper, gScene);
+
+#endif
 
 #if GLUE_TEST
     // Set up glue constraints between tet mesh and rigid body
@@ -3197,8 +3196,11 @@ void FreeScene()
     FreeTractorTireSimObjectTemplate(&gTractorTireTemplate);
 #endif
 
-    // Piper
+#if PIPER_IN_SCENE  
+
     FreePiperSimObjectTemplate(&gPiperTemplate);
+
+#endif
 
     SampleDestroyTaskSystem();
 }
