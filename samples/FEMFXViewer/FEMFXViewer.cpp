@@ -49,7 +49,7 @@ using namespace AMD;
 
 // Custom setting
 #define GROUND_HALF_SIZE        1000
-#define GROUND_COLOR            10
+#define GROUND_COLOR            0.8f
 #define CAMERA_LOOK_AT_BASE_X   15
 #define CAMERA_LOOK_AT_BASE_Y   15
 #define CAMERA_LOOK_AT_BASE_Z   15

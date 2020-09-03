@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 
 // Add piper to the scene
-#define PIPER_IN_SCENE  0
+#define PIPER_IN_SCENE  1
 
 
 

@@ -1,3 +1,5 @@
 ﻿  TestScenes.cpp
   FEMFXViewer.cpp
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1674,14): warning C4189: 'numVerts': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1729,93): warning C4100: 'piperSimObjectTemplate': unreferenced formal parameter
   FEMFXViewer_vs2019.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\FEMFXViewer.exe
