@@ -840,6 +840,7 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
 
     uint wheelRimIdx = 0;
     uint bodyAxelIdx = 0;
+    /*
     for (uint wheelIdx = 0; wheelIdx < 4; wheelIdx++)
     {
         // Create rigid body hinge joint
@@ -976,7 +977,7 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
             bodyAxelIdx++;
         }
     }
-
+    */
     // Find points of attachment for hood on car
     FmFindClosestTet(&hoodGluePoints[0], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(0.0f, 2.0f, 1.0f));
     FmFindClosestTet(&hoodGluePoints[1], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(0.0f, 2.0f, -1.0f));
@@ -996,6 +997,7 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
     bodyHoodGlueBarycentrics[2] = mul(FmGetTetRestBaryMatrix(carBodyMesh, bodyHoodGluePoints[2].tetId), FmVector4(hoodGluePoints[2].position, 1.0f));
 
     // Find glue points of seatback meshes
+    /*
     FmFindClosestTet(&seatbackLGluePoints[0], seatbackLTemplate.vertRestPositions, seatbackLTemplate.tetVertIds, seatbackLTemplate.tetsBvh, FmInitVector3(-10.0f, -10.0f, -10.0f));
     FmFindClosestTet(&seatbackLGluePoints[1], seatbackLTemplate.vertRestPositions, seatbackLTemplate.tetVertIds, seatbackLTemplate.tetsBvh, FmInitVector3(-10.0f, -10.0f, 10.0f));
     FmFindClosestTet(&seatbackLGluePoints[2], seatbackLTemplate.vertRestPositions, seatbackLTemplate.tetVertIds, seatbackLTemplate.tetsBvh, FmInitVector3(10.0f, -10.0f, -10.0f));
@@ -1004,9 +1006,9 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
     FmFindClosestTet(&seatbackRGluePoints[1], seatbackRTemplate.vertRestPositions, seatbackRTemplate.tetVertIds, seatbackRTemplate.tetsBvh, FmInitVector3(-10.0f, -10.0f, 10.0f));
     FmFindClosestTet(&seatbackRGluePoints[2], seatbackRTemplate.vertRestPositions, seatbackRTemplate.tetVertIds, seatbackRTemplate.tetsBvh, FmInitVector3(10.0f, -10.0f, -10.0f));
     FmFindClosestTet(&seatbackRGluePoints[3], seatbackRTemplate.vertRestPositions, seatbackRTemplate.tetVertIds, seatbackRTemplate.tetsBvh, FmInitVector3(10.0f, -10.0f, 10.0f));
-
+    */
     // Find corresponding points on body
-    FmFindClosestTet(&bodySeatbackLGluePoints[0], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, seatbackLGluePoints[0].position);
+    /*FmFindClosestTet(&bodySeatbackLGluePoints[0], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, seatbackLGluePoints[0].position);
     FmFindClosestTet(&bodySeatbackLGluePoints[1], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, seatbackLGluePoints[1].position);
     FmFindClosestTet(&bodySeatbackLGluePoints[2], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, seatbackLGluePoints[2].position);
     FmFindClosestTet(&bodySeatbackLGluePoints[3], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, seatbackLGluePoints[2].position);
@@ -1023,7 +1025,7 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
     bodySeatbackRbarycentrics[1] = mul(FmGetTetRestBaryMatrix(carBodyMesh, bodySeatbackRGluePoints[1].tetId), FmVector4(seatbackRGluePoints[1].position, 1.0f));
     bodySeatbackRbarycentrics[2] = mul(FmGetTetRestBaryMatrix(carBodyMesh, bodySeatbackRGluePoints[2].tetId), FmVector4(seatbackRGluePoints[2].position, 1.0f));
     bodySeatbackRbarycentrics[3] = mul(FmGetTetRestBaryMatrix(carBodyMesh, bodySeatbackRGluePoints[3].tetId), FmVector4(seatbackRGluePoints[3].position, 1.0f));
-
+    */
     car->hoodHingeMaxImpulseMag = 10000.0f;
     car->hoodLatchMaxImpulseMag = 5000.0f;
 
@@ -1059,9 +1061,11 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
             FmAddTetFlags(&carHoodMesh, hoodGluePoints[hoodGlueIdx].tetId, FM_TET_FLAG_PLASTICITY_DISABLED);
         }
     }
-
+    
     // Glue seats to car
-    uint bodySeatIdx = 0;
+    /*uint bodySeatIdx = 0;
+
+    
     for (uint seatGlueIdx = 0; seatGlueIdx < 4; seatGlueIdx++)
     {
         FmGlueConstraintSetupParams glueConstraint;
@@ -1104,7 +1108,7 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
         car->bodySeatGlueConstraints[bodySeatIdx] = glueId;
         bodySeatIdx++;
     }
-
+    */
     {
         FmPlaneConstraintSetupParams planeConstraint;
         planeConstraint.kVelCorrection = 1.0f;
@@ -1221,7 +1225,7 @@ void AddCarSimObjectToScene(CarSimObject* car, const CarSimObjectTemplate& carTe
 
         FM_ASSERT(carPlaneIdx == CarSimObject::numPlaneConstraints);
     }
-
+    
     delete[] tetsIntersected;
 }
 
@@ -1567,10 +1571,16 @@ TractorTireSimObjectTemplate gTractorTireTemplate;
 
 #if PIPER_IN_SCENE
 
+//#define NUM_BONES 1 
+#define NUM_PIPER_BONES_TEMPLATES 2
+
 struct PiperSimObject
 {
-    static const uint numTetMeshBuffers = 7;  // C1, C2 .... C7
-    static const uint numRigidBodies = 7;
+    static const uint numTetMeshBuffers = NUM_PIPER_BONES_TEMPLATES;
+    static const uint numRigidBodies = NUM_PIPER_BONES_TEMPLATES;
+    static const uint numBodyHoodGlueConstraints = 2;
+
+    uint planeConstraints[11];    
 
     // Tet mesh buffers to be added to scene
     FmTetMeshBuffer* tetMeshBuffers[numTetMeshBuffers];
@@ -1579,9 +1589,10 @@ struct PiperSimObject
     // Will be copied into scene
     FmRigidBodySetupParams rigidBodySetupParams[numRigidBodies];
 
-    // Pointers to scene objects when added to scene
-    FmRigidBody* rigidBodies[numRigidBodies];
-    uint rigidBodyIds[numRigidBodies];
+    float hoodHingeMaxImpulseMag;
+    float hoodLatchMaxImpulseMag;
+
+    uint bodyHoodGlueConstraints[2];
 
     FmVector3 initialPosition;
     FmMatrix3 initialRotation;
@@ -1595,7 +1606,10 @@ struct PiperSimObject
 struct PiperSimObjectTemplate
 {
     TetMeshBufferTemplate tetMeshBufferTemplates[PiperSimObject::numTetMeshBuffers];
-    FmRigidBodySetupParams rigidBodySetupParams[PiperSimObject::numRigidBodies];
+    //FmRigidBodySetupParams rigidBodySetupParams[PiperSimObject::numRigidBodies];
+
+    FmVector3 boneMinPositions[NUM_PIPER_BONES_TEMPLATES];
+    FmVector3 boneMaxPositions[NUM_PIPER_BONES_TEMPLATES];
 };
 
 void InitPiperSimObjectTemplate(PiperSimObjectTemplate* piperSimObjectTemplate, const char* modelsPath)
@@ -1603,7 +1617,7 @@ void InitPiperSimObjectTemplate(PiperSimObjectTemplate* piperSimObjectTemplate, 
     for (uint piperSubIdx = 0; piperSubIdx < PiperSimObject::numTetMeshBuffers; piperSubIdx++)
     {
         bool enablePlasticity = false;
-        bool enableFracture = true;
+        bool enableFracture = false;
         bool isKinematic = false;
 
         const char* fileName = NULL;
@@ -1614,41 +1628,251 @@ void InitPiperSimObjectTemplate(PiperSimObjectTemplate* piperSimObjectTemplate, 
         case 0:
             fileName = "piper/C1.1";
             materialParams.restDensity = 1000.0f;
-            materialParams.youngsModulus = 2.5e7f;
+            materialParams.youngsModulus = 2.5e9f;
             materialParams.poissonsRatio = 0.495f;
             break;
         case 1:
             fileName = "piper/C2.1";
             materialParams.restDensity = 1000.0f;
-            materialParams.youngsModulus = 2.5e7f;
+            materialParams.youngsModulus = 2.5e9f;
             materialParams.poissonsRatio = 0.495f;
             break;
         case 2:
             fileName = "piper/C3.1";
             materialParams.restDensity = 1000.0f;
-            materialParams.youngsModulus = 2.5e7f;
+            materialParams.youngsModulus = 2.5e9f;
             materialParams.poissonsRatio = 0.495f;
             break;
         case 3:
             fileName = "piper/C4.1";
             materialParams.restDensity = 1000.0f;
-            materialParams.youngsModulus = 2.5e7f;
+            materialParams.youngsModulus = 2.5e9f;
             materialParams.poissonsRatio = 0.495f;
             break;
         case 4:
             fileName = "piper/C5.1";
             materialParams.restDensity = 1000.0f;
-            materialParams.youngsModulus = 2.5e7f;
+            materialParams.youngsModulus = 2.5e9f;
             materialParams.poissonsRatio = 0.495f;
             break;
         case 5:
             fileName = "piper/C6.1";
             materialParams.restDensity = 1000.0f;
-            materialParams.youngsModulus = 2.5e7f;
+            materialParams.youngsModulus = 2.5e9f;
             materialParams.poissonsRatio = 0.495f;
             break;
         case 6:
             fileName = "piper/C7.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e9f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 7:
+            fileName = "piper/L1.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 8:
+            fileName = "piper/L2.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 9:
+            fileName = "piper/L3.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 10:
+            fileName = "piper/L4.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 11:
+            fileName = "piper/L5.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        /*case 12:
+            fileName = "piper/T1.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;*/
+        case 12:
+            fileName = "piper/T2.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 13:
+            fileName = "piper/T3.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 14:
+            fileName = "piper/T4.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 15:
+            fileName = "piper/T5.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 16:
+            fileName = "piper/T6.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 17:
+            fileName = "piper/T7.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 18:
+            fileName = "piper/T8.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 19:
+            fileName = "piper/T9.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 20:
+            fileName = "piper/T10.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 21:
+            fileName = "piper/T11.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 22:
+            fileName = "piper/T12.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 23:
+            fileName = "piper/Left_clavicle.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 24:
+            fileName = "piper/Left_femur.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 25:
+            fileName = "piper/Left_fibula.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        /*case 26:
+            fileName = "piper/Left_humerus.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;*/
+        case 26:
+            fileName = "piper/Left_patella.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 27:
+            fileName = "piper/Left_radius.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 28:
+            fileName = "piper/Left_scapula.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 29:
+            fileName = "piper/Left_tibia.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 30:
+            fileName = "piper/Left_ulna.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 31:
+            fileName = "piper/Pelvic_skeleton.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 32:
+            fileName = "piper/Right_clavicle.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 33:
+            fileName = "piper/Right_femur.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 34:
+            fileName = "piper/Right_fibula.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        /*case 35:
+            fileName = "piper/Right_humerus.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;*/
+        case 35:
+            fileName = "piper/Right_radius.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 36:
+            fileName = "piper/Right_scapula.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 37:
+            fileName = "piper/Right_tibia.1";
+            materialParams.restDensity = 1000.0f;
+            materialParams.youngsModulus = 2.5e7f;
+            materialParams.poissonsRatio = 0.495f;
+            break;
+        case 38:
+            fileName = "piper/Right_ulna.1";
             materialParams.restDensity = 1000.0f;
             materialParams.youngsModulus = 2.5e7f;
             materialParams.poissonsRatio = 0.495f;
@@ -1659,10 +1883,24 @@ void InitPiperSimObjectTemplate(PiperSimObjectTemplate* piperSimObjectTemplate, 
 
         TetMeshBufferTemplate& meshBufferTemplate = piperSimObjectTemplate->tetMeshBufferTemplates[piperSubIdx];
         InitTetMeshBufferTemplate(&meshBufferTemplate, materialParams, collisionGroup, modelsPath, fileName, enablePlasticity, enableFracture, isKinematic);
+
+        FmVector3 minPos = meshBufferTemplate.vertRestPositions[0];
+        FmVector3 maxPos = meshBufferTemplate.vertRestPositions[0];
+        uint numVerts = meshBufferTemplate.setupParams.numVerts;
+
+        for (uint vIdx = 0; vIdx < numVerts; vIdx++)
+        {
+            minPos = min(minPos, meshBufferTemplate.vertRestPositions[vIdx]);
+            maxPos = max(maxPos, meshBufferTemplate.vertRestPositions[vIdx]);
+        }
+
+        piperSimObjectTemplate->boneMinPositions[piperSubIdx] = minPos;
+        piperSimObjectTemplate->boneMaxPositions[piperSubIdx] = maxPos;
+
     }
 }
 
-void CreatePiperSimObject(PiperSimObject* piperSimObject, PiperSimObjectTemplate& piperSimObjectTemplate, const FmVector3& position, const FmMatrix3& rotation, const FmVector3& velocity)
+void CreatePiperSimObject(PiperSimObject* piperSimObject, PiperSimObjectTemplate& piperSimObjectTemplate, const FmVector3& position, const FmMatrix3& rotation, const FmVector3& velocity) 
 {
     piperSimObject->initialPosition = position;
     piperSimObject->initialRotation = rotation;
@@ -1683,14 +1921,6 @@ void CreatePiperSimObject(PiperSimObject* piperSimObject, PiperSimObjectTemplate
         gNumTetMeshBuffers++;
 
         FmTetMesh& tetMesh = *tetMeshPtr;
-
-       /* FmVector3 minPos = meshBufferTemplate.vertRestPositions[0];
-        FmVector3 maxPos = meshBufferTemplate.vertRestPositions[0];
-        for (uint vIdx = 0; vIdx < numVerts; vIdx++)
-        {
-            minPos = min(minPos, meshBufferTemplate.vertRestPositions[vIdx]);
-            maxPos = max(maxPos, meshBufferTemplate.vertRestPositions[vIdx]);
-        }*/
 
         FmInitVertState(&tetMesh, meshBufferTemplate.vertRestPositions, rotation, position, 1.0f, velocity);
 
@@ -1713,9 +1943,9 @@ void CreatePiperSimObject(PiperSimObject* piperSimObject, PiperSimObjectTemplate
         piperSimObject->tetMeshBuffers[piperSubIdx] = tetMeshBuffer;
     }
 
-    FmQuat quat = FmQuat(rotation);
-
-    for (uint rbIdx = 0; rbIdx < CarSimObject::numRigidBodies; rbIdx++)
+    /*FmQuat quat = FmQuat(rotation);
+    
+    for (uint rbIdx = 0; rbIdx < PiperSimObject::numRigidBodies; rbIdx++)
     {
         FmRigidBodySetupParams& rigidBodySetupParams = piperSimObject->rigidBodySetupParams[rbIdx];
 
@@ -1723,7 +1953,7 @@ void CreatePiperSimObject(PiperSimObject* piperSimObject, PiperSimObjectTemplate
         rigidBodySetupParams.state.pos = position + mul(rotation, rigidBodySetupParams.state.pos);
         rigidBodySetupParams.state.vel = velocity;
         rigidBodySetupParams.state.quat = mul(quat, rigidBodySetupParams.state.quat);
-    }
+    }*/
 }
 
 void AddPiperSimObjectToScene(PiperSimObject* piperSimObject, const PiperSimObjectTemplate& piperSimObjectTemplate, FmScene* scene)
@@ -1735,7 +1965,7 @@ void AddPiperSimObjectToScene(PiperSimObject* piperSimObject, const PiperSimObje
         FM_ASSERT(bufferId != FM_INVALID_ID);
     }
 
-    for (uint rbIdx = 0; rbIdx < PiperSimObject::numRigidBodies; rbIdx++)
+    /*for (uint rbIdx = 0; rbIdx < PiperSimObject::numRigidBodies; rbIdx++)
     {
         FmRigidBody* rigidBody = FmCreateRigidBody(piperSimObject->rigidBodySetupParams[rbIdx]);
 
@@ -1745,7 +1975,209 @@ void AddPiperSimObjectToScene(PiperSimObject* piperSimObject, const PiperSimObje
 
         gRigidBodies[gNumRigidBodies] = rigidBody;
         gNumRigidBodies++;
+    }*/
+
+    // Add constraints holding components together
+
+    // First find points on hood
+    FmClosestTetResult bodyHoodGluePoints[3];
+    FmClosestTetResult hoodGluePoints[3];
+
+    FmVector4 bodyHoodGlueBarycentrics[3];
+    FmVector4 hoodHoodGlueBarycentrics[3];
+
+    uint* tetsIntersected = NULL;
+
+    uint bodyBufferId = piperSimObject->tetMeshBufferIds[0];
+    uint hoodBufferId = piperSimObject->tetMeshBufferIds[1];
+
+    FmTetMesh& carBodyMesh = *FmGetTetMesh(*piperSimObject->tetMeshBuffers[0], 0);
+    FmTetMesh& carHoodMesh = *FmGetTetMesh(*piperSimObject->tetMeshBuffers[1], 0);
+
+    const TetMeshBufferTemplate& bodyTemplate = piperSimObjectTemplate.tetMeshBufferTemplates[0];
+    const TetMeshBufferTemplate& hoodTemplate = piperSimObjectTemplate.tetMeshBufferTemplates[1];
+
+    uint numTets = FmGetNumTets(carBodyMesh);
+    tetsIntersected = new uint[numTets];
+
+    // Find points of attachment for hood on car
+    FmFindClosestTet(&hoodGluePoints[0], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(0.0f, 2.0f, 1.0f));
+    FmFindClosestTet(&hoodGluePoints[1], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(0.0f, 2.0f, -1.0f));
+    FmFindClosestTet(&hoodGluePoints[2], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(4.0f, 0.0f, 0.0f));
+
+    // Then find nearest tets on body for attachement
+    FmFindClosestTet(&bodyHoodGluePoints[0], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, hoodGluePoints[0].position);
+    FmFindClosestTet(&bodyHoodGluePoints[1], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, hoodGluePoints[1].position);
+    FmFindClosestTet(&bodyHoodGluePoints[2], bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh, hoodGluePoints[2].position);
+
+    // Compute barycentric coords
+    hoodHoodGlueBarycentrics[0] = mul(FmGetTetRestBaryMatrix(carHoodMesh, hoodGluePoints[0].tetId), FmVector4(hoodGluePoints[0].position, 1.0f));
+    hoodHoodGlueBarycentrics[1] = mul(FmGetTetRestBaryMatrix(carHoodMesh, hoodGluePoints[1].tetId), FmVector4(hoodGluePoints[1].position, 1.0f));
+    hoodHoodGlueBarycentrics[2] = mul(FmGetTetRestBaryMatrix(carHoodMesh, hoodGluePoints[2].tetId), FmVector4(hoodGluePoints[2].position, 1.0f));
+    bodyHoodGlueBarycentrics[0] = mul(FmGetTetRestBaryMatrix(carBodyMesh, bodyHoodGluePoints[0].tetId), FmVector4(hoodGluePoints[0].position, 1.0f));
+    bodyHoodGlueBarycentrics[1] = mul(FmGetTetRestBaryMatrix(carBodyMesh, bodyHoodGluePoints[1].tetId), FmVector4(hoodGluePoints[1].position, 1.0f));
+
+    bodyHoodGlueBarycentrics[2] = mul(FmGetTetRestBaryMatrix(carBodyMesh, bodyHoodGluePoints[2].tetId), FmVector4(hoodGluePoints[2].position, 1.0f));
+    
+    piperSimObject->hoodHingeMaxImpulseMag = 10000.0f;
+    piperSimObject->hoodLatchMaxImpulseMag = 5000.0f;
+
+    // Glue C1 to C2
+    for (uint hoodGlueIdx = 0; hoodGlueIdx < PiperSimObject::numBodyHoodGlueConstraints; hoodGlueIdx++)
+    {
+        FmGlueConstraintSetupParams glueConstraint;
+
+        glueConstraint.bufferIdA = bodyBufferId;
+        glueConstraint.bufferIdB = hoodBufferId;
+
+        glueConstraint.bufferTetIdA = bodyHoodGluePoints[hoodGlueIdx].tetId;
+        glueConstraint.bufferTetIdB = hoodGluePoints[hoodGlueIdx].tetId;
+
+        glueConstraint.posBaryA[0] = bodyHoodGlueBarycentrics[hoodGlueIdx].x;
+        glueConstraint.posBaryA[1] = bodyHoodGlueBarycentrics[hoodGlueIdx].y;
+        glueConstraint.posBaryA[2] = bodyHoodGlueBarycentrics[hoodGlueIdx].z;
+        glueConstraint.posBaryA[3] = bodyHoodGlueBarycentrics[hoodGlueIdx].w;
+        glueConstraint.posBaryB[0] = hoodHoodGlueBarycentrics[hoodGlueIdx].x;
+        glueConstraint.posBaryB[1] = hoodHoodGlueBarycentrics[hoodGlueIdx].y;
+        glueConstraint.posBaryB[2] = hoodHoodGlueBarycentrics[hoodGlueIdx].z;
+        glueConstraint.posBaryB[3] = hoodHoodGlueBarycentrics[hoodGlueIdx].w;
+
+        glueConstraint.breakThreshold = piperSimObject->hoodHingeMaxImpulseMag;
+
+        uint glueId = FmAddGlueConstraintToScene(scene, glueConstraint);
+        piperSimObject->bodyHoodGlueConstraints[hoodGlueIdx] = glueId;
+
+        if (hoodGlueIdx < 2)
+        {
+            FmTetMaterialParams tetMaterialParams = FmGetTetMaterialParams(carHoodMesh, hoodGluePoints[hoodGlueIdx].tetId);
+            FmUpdateTetMaterialParams(gScene, &carHoodMesh, hoodGluePoints[hoodGlueIdx].tetId, tetMaterialParams);
+            FmAddTetFlags(&carHoodMesh, hoodGluePoints[hoodGlueIdx].tetId, FM_TET_FLAG_PLASTICITY_DISABLED);
+        }
     }
+    {
+        FmPlaneConstraintSetupParams planeConstraint;
+        planeConstraint.kVelCorrection = 1.0f;
+        planeConstraint.kPosCorrection = 1.0f;
+
+        FmVector3 bodyMinPosition;
+        FmVector3 bodyMaxPosition;
+        FmGetBoundingBox(&bodyMinPosition, &bodyMaxPosition, *bodyTemplate.tetsBvh);
+
+        FmClosestTetResult bodyClosestTetRoof;
+        FmFindClosestTet(   &bodyClosestTetRoof, 
+                            bodyTemplate.vertRestPositions, 
+                            bodyTemplate.tetVertIds, 
+                            bodyTemplate.tetsBvh,
+                            FmInitVector3(0.0f, bodyMaxPosition.y - 0.5f, 0.0f));
+
+        FmClosestTetResult bodyClosestTetFloor;
+        FmFindClosestTet(   &bodyClosestTetFloor, 
+                            bodyTemplate.vertRestPositions, 
+                            bodyTemplate.tetVertIds, 
+                            bodyTemplate.tetsBvh,
+                            FmInitVector3(0.0f, bodyMinPosition.y + 0.5f, 0.0f));
+
+        planeConstraint.bufferIdA = bodyBufferId;
+        planeConstraint.bufferIdB = bodyBufferId;
+        planeConstraint.bufferTetIdA = bodyClosestTetRoof.tetId;
+        planeConstraint.bufferTetIdB = bodyClosestTetFloor.tetId;
+
+        planeConstraint.posBaryA[0] = bodyClosestTetRoof.posBary[0];
+        planeConstraint.posBaryA[1] = bodyClosestTetRoof.posBary[1];
+        planeConstraint.posBaryA[2] = bodyClosestTetRoof.posBary[2];
+        planeConstraint.posBaryA[3] = bodyClosestTetRoof.posBary[3];
+
+        planeConstraint.posBaryB[0] = bodyClosestTetFloor.posBary[0];
+        planeConstraint.posBaryB[1] = bodyClosestTetFloor.posBary[1];
+        planeConstraint.posBaryB[2] = bodyClosestTetFloor.posBary[2];
+        planeConstraint.posBaryB[3] = bodyClosestTetFloor.posBary[3];
+
+        planeConstraint.bias0 = 0.25f;
+        planeConstraint.planeNormal0 = FmInitVector3(0.0f, 1.0f, 0.0f);
+        planeConstraint.numDimensions = 1;
+        planeConstraint.nonNeg0 = true;
+
+        uint carPlaneIdx = 0;
+        uint planeId = FmAddPlaneConstraintToScene(scene, planeConstraint);
+        piperSimObject->planeConstraints[carPlaneIdx] = planeId;
+        carPlaneIdx++;
+
+        // Set up plane constraints to keep the hood out of the car.
+
+        // All start disabled and are enabled based on proximity
+        planeConstraint.enabled = false;
+
+        // Create 5 points on hood
+        FmVector3 hoodBoxMinPosition;
+        FmVector3 hoodBoxMaxPosition;
+        FmGetBoundingBox(&hoodBoxMinPosition, &hoodBoxMaxPosition, *bodyTemplate.tetsBvh);
+        FmVector3 hoodCenter = (hoodBoxMinPosition + hoodBoxMaxPosition) * 0.5f;
+        FmClosestTetResult hoodCollisionPoints[5];
+        FmFindClosestTet(&hoodCollisionPoints[0], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, hoodCenter);
+        FmFindClosestTet(&hoodCollisionPoints[1], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(hoodBoxMinPosition.x, hoodCenter.y, hoodBoxMinPosition.z));
+        FmFindClosestTet(&hoodCollisionPoints[2], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(hoodBoxMinPosition.x, hoodCenter.y, hoodBoxMaxPosition.z));
+        FmFindClosestTet(&hoodCollisionPoints[3], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(hoodBoxMaxPosition.x, hoodCenter.y, hoodBoxMinPosition.z));
+        FmFindClosestTet(&hoodCollisionPoints[4], hoodTemplate.vertRestPositions, hoodTemplate.tetVertIds, hoodTemplate.tetsBvh, FmInitVector3(hoodBoxMaxPosition.x, hoodCenter.y, hoodBoxMaxPosition.z));
+
+        // Use bodyClosestTetFloor and create new body point in engine compartment
+        FmClosestTetResult bodyClosestTetEngineCompartment;
+        FmFindClosestTet(&bodyClosestTetEngineCompartment, bodyTemplate.vertRestPositions, bodyTemplate.tetVertIds, bodyTemplate.tetsBvh,
+            hoodCenter - FmInitVector3(0.0f, 0.25f, 0.0f));
+
+        // Constraints for engine compartment
+        for (uint i = 0; i < 5; i++)
+        {
+            planeConstraint.bufferIdA = hoodBufferId;
+            planeConstraint.bufferIdB = bodyBufferId;
+            planeConstraint.bufferTetIdA = hoodCollisionPoints[i].tetId;
+            planeConstraint.bufferTetIdB = bodyClosestTetEngineCompartment.tetId;
+
+            planeConstraint.posBaryA[0] = hoodCollisionPoints[i].posBary[0];
+            planeConstraint.posBaryA[1] = hoodCollisionPoints[i].posBary[1];
+            planeConstraint.posBaryA[2] = hoodCollisionPoints[i].posBary[2];
+            planeConstraint.posBaryA[3] = hoodCollisionPoints[i].posBary[3];
+
+            planeConstraint.posBaryB[0] = bodyClosestTetEngineCompartment.posBary[0];
+            planeConstraint.posBaryB[1] = bodyClosestTetEngineCompartment.posBary[1];
+            planeConstraint.posBaryB[2] = bodyClosestTetEngineCompartment.posBary[2];
+            planeConstraint.posBaryB[3] = bodyClosestTetEngineCompartment.posBary[3];
+
+            planeConstraint.bias0 = 0.5f;
+
+            planeId = FmAddPlaneConstraintToScene(scene, planeConstraint);
+            piperSimObject->planeConstraints[carPlaneIdx] = planeId;
+            carPlaneIdx++;
+        }
+
+        // Constraints for cabin
+        for (uint i = 0; i < 5; i++)
+        {
+            planeConstraint.bufferIdA = hoodBufferId;
+            planeConstraint.bufferIdB = bodyBufferId;
+            planeConstraint.bufferTetIdA = hoodCollisionPoints[i].tetId;
+            planeConstraint.bufferTetIdB = bodyClosestTetFloor.tetId;
+
+            planeConstraint.posBaryA[0] = hoodCollisionPoints[i].posBary[0];
+            planeConstraint.posBaryA[1] = hoodCollisionPoints[i].posBary[1];
+            planeConstraint.posBaryA[2] = hoodCollisionPoints[i].posBary[2];
+            planeConstraint.posBaryA[3] = hoodCollisionPoints[i].posBary[3];
+
+            planeConstraint.posBaryB[0] = bodyClosestTetFloor.posBary[0];
+            planeConstraint.posBaryB[1] = bodyClosestTetFloor.posBary[1];
+            planeConstraint.posBaryB[2] = bodyClosestTetFloor.posBary[2];
+            planeConstraint.posBaryB[3] = bodyClosestTetFloor.posBary[3];
+
+            planeConstraint.bias0 = 0.75f;
+
+            planeId = FmAddPlaneConstraintToScene(scene, planeConstraint);
+            piperSimObject->planeConstraints[carPlaneIdx] = planeId;
+            carPlaneIdx++;
+        }
+
+        FM_ASSERT(carPlaneIdx == CarSimObject::numPlaneConstraints);
+    }
+
+    delete[] tetsIntersected;
 }
 
 void FreePiperSimObjectTemplate(PiperSimObjectTemplate* piperSimObjectTemplate)
@@ -1756,7 +2188,7 @@ void FreePiperSimObjectTemplate(PiperSimObjectTemplate* piperSimObjectTemplate)
 
 PiperSimObject gPiperSimObject;
 PiperSimObjectTemplate gPiperSimObjectTemplate;
-TetMeshBufferTemplate* gPiperTetMeshBufferTemplates[7] = { NULL };
+TetMeshBufferTemplate* gPiperTetMeshBufferTemplates[NUM_PIPER_BONES_TEMPLATES] = { NULL };
 
 #endif
 
@@ -2133,11 +2565,9 @@ void InitScene(const char* modelsPath, const char* timingsPath, int numThreads, 
 
 #if PIPER_IN_SCENE 
 
-    //gPipers = new PiperSimObject[1];
-
     InitPiperSimObjectTemplate(&gPiperSimObjectTemplate, modelsPath);
 
-    for (uint i = 0; i < 8; i++)
+    for (uint i = 0; i < NUM_PIPER_BONES_TEMPLATES; i++)
         gPiperTetMeshBufferTemplates[i] = &gPiperSimObjectTemplate.tetMeshBufferTemplates[i];
 
 #endif
@@ -3095,6 +3525,7 @@ void UpdateObjects()
     FmSetState(gScene, rigidBody, state);
 #endif
 #if CARS_IN_SCENE
+    
     for (uint carIdx = 0; carIdx < gNumCars; carIdx++)
     {
         CarSimObject& car = gCars[carIdx];
@@ -3243,6 +3674,7 @@ void UpdateObjects()
             }
         }
     }
+    
 #endif
 }
 
@@ -3302,6 +3734,10 @@ void FreeScene()
 #if PIPER_IN_SCENE  
 
     FreePiperSimObjectTemplate(&gPiperSimObjectTemplate);
+
+    for (uint i = 0; i < NUM_PIPER_BONES_TEMPLATES; i++)
+        gPiperTetMeshBufferTemplates[i] = NULL;
+
 
 #endif
 

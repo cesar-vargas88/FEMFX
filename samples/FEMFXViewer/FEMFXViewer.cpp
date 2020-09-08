@@ -50,9 +50,9 @@ using namespace AMD;
 // Custom setting
 #define GROUND_HALF_SIZE        1000
 #define GROUND_COLOR            0.8f
-#define CAMERA_LOOK_AT_BASE_X   15
-#define CAMERA_LOOK_AT_BASE_Y   15
-#define CAMERA_LOOK_AT_BASE_Z   15
+#define CAMERA_LOOK_AT_BASE_X   2
+#define CAMERA_LOOK_AT_BASE_Y   2
+#define CAMERA_LOOK_AT_BASE_Z   2
 
 #define NEAR_PLANE              0.1f
 #define FAR_PLANE               10000
@@ -98,14 +98,14 @@ static int gTargetFrame = 0;
 
 static const float gTimestep = (1.0f / 60.0f);
 
-static bool gDrawWireframe = false;
-static bool gDrawContacts = false;
-static bool gDrawGlue = false;
-static bool gDrawVolContacts = false;
+static bool gDrawWireframe = false;             // Edges
+static bool gDrawContacts = false;              // Contact vertex 
+static bool gDrawGlue = false;                  // Glue
+static bool gDrawVolContacts = false;           // Contact vertex
 static bool gDrawHighAspectRatioTets = false;
 static bool gDrawKinematicTets = false;
 static bool gDrawFractureFlags = false;
-static bool gDrawFracturableFaces = true;
+static bool gDrawFracturableFaces = false;
 
 static const int gWinWidth = 1280;
 static const int gWinHeight = 720;

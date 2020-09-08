@@ -44,7 +44,7 @@ THE SOFTWARE.
 // tetrahedra, and each has parameters from a material physics model to control behavior like 
 // flexibility or resistance to fracture.  This supports a range of material types from elastic 
 // soft-bodies to stiffer flexible materials such as wood or metal.
-//
+// 
 // The system is still experimental and not a complete solution.  However, we hope that the 
 // release provides useful information and sample code for developers interested in physics, 
 // collision detection, and multithreading.  The implementation has extensive multithreading

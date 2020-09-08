@@ -1,5 +1,9 @@
 ﻿  TestScenes.cpp
-  FEMFXViewer.cpp
-C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1674,14): warning C4189: 'numVerts': local variable is initialized but not referenced
-C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1729,93): warning C4100: 'piperSimObjectTemplate': unreferenced formal parameter
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(842,10): warning C4189: 'bodyAxelIdx': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(796,10): warning C4189: 'seatbackLBufferId': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(819,34): warning C4189: 'seatbackLTemplate': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(841,10): warning C4189: 'wheelRimIdx': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(820,34): warning C4189: 'seatbackRTemplate': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(797,10): warning C4189: 'seatbackRbufferId': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1912,14): warning C4189: 'numVerts': local variable is initialized but not referenced
   FEMFXViewer_vs2019.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Release\FEMFXViewer.exe

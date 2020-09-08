@@ -1,3 +1,11 @@
 ﻿  TestScenes.cpp
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(842,10): warning C4189: 'bodyAxelIdx': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(841,10): warning C4189: 'wheelRimIdx': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1905,14): warning C4189: 'numVerts': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1990,34): warning C4189: 'C2Template': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1984,10): warning C4189: 'C2BufferId': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1989,34): warning C4189: 'C1Template': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1983,10): warning C4189: 'C1BufferId': local variable is initialized but not referenced
+C:\Users\varga\source\repos\FEMFX\samples\common\TestScenes.cpp(1987,16): warning C4189: 'piperC2Mesh': local variable is initialized but not referenced
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   FEMFXViewer_vs2019.vcxproj -> C:\Users\varga\source\repos\FEMFX\samples\FEMFXViewer\build\vs2019\x86_64\Debug\FEMFXViewer_d.exe
